@@ -11,21 +11,21 @@ A set of codes for raspberry pi
 
 #### 1.1. [Video stream with Picamera](## 1.1. Video stream with Picamera)
 
-#### 1.2. [GSTream](## 1.2 GStream) 
+#### 1.2. [GSTream](## 1.2. GStream) 
 
-#### 1.3. [GSTream Thread](## 1.3 GStream Thread)
+#### 1.3. [GSTream Thread](## 1.3. GStream Thread)
 
-#### 1.4. [Video and Telemetry stream with Picamera](## 1.4 Video and Telemetry stream with Picamera)
+#### 1.4. [Video and Telemetry stream with Picamera](## 1.4. Video and Telemetry stream with Picamera)
 
 
 ### 2. Web Crawling
 
-#### 2.1. [Create Image dataset with Google Image](## 2.1 Create Image dataset with Google Image)
+#### 2.1. [Create Image dataset with Google Image](## 2.1. Create Image dataset with Google Image)
 
 
 ### 3. Math
 
-#### 3.1. [Compute Gradient with Theano](## 3.1 Compute Gradient with Theano)
+#### 3.1. [Compute Gradient with Theano](## 3.1. Compute Gradient with Theano)
 --------------
 
 # 1.Raspberry Pi modules
