@@ -6,7 +6,7 @@ import socket
 from PIL import Image
 import os
 import datetime
-
+import argparse
 
 def make_folder(root="images/"):
     now = datetime.datetime.now()
@@ -27,7 +27,7 @@ def make_folder(root="images/"):
 
 
 
-def video_thread(datafolder):
+def video_thread(datafolder, IP_ADDR):
     '''
     https://stackoverflow.com/questions/3312607/php-binary-image-data-checking-the-image-type
         Check the header to check the format (jpg, png, etc)
@@ -40,7 +40,7 @@ def video_thread(datafolder):
         The other ones I wouldn't know right now, but the big 3 (jpeg,gif,png) usually cover 99%. So, compare the first bytes to those string, and you have your answer.
 
     '''
-    stream=urllib.request.urlopen('http://192.168.0.111:8080/?action=stream')
+    stream=urllib.request.urlopen("http://"+IP_ADDR+":8080/?action=stream")
     frame_id = 0
     bytes_= b''
     while True:
@@ -49,10 +49,10 @@ def video_thread(datafolder):
         #print(bytes_)
         #print()
         #print()
-        start_jpg = bytes_.find(b'\xff\xd8')
-        end_jpg = bytes_.find(b'\xff\xd9')
+        start_jpg = bytes_.find(b"\xff\xd8")
+        end_jpg = bytes_.find(b"\xff\xd9")
         #Timestamp
-        start_timestamp = bytes_.find(b'Timestamp') + len("Timestamp: ")
+        start_timestamp = bytes_.find(b"Timestamp") + len("Timestamp: ")
         end_timestamp = start_jpg - len( "\r\n\r\n" )
         #timestamp = bytes_[start_timestamp:end_timestamp].decode('ascii')
         #Timestamp: 1512200452.557939\r\n\r\n\xff\xd8\
@@ -119,7 +119,7 @@ def data_thread2():
     #Then bind() is used to associate the socket with the server address. 
     #In this case, the address is localhost, referring to the current server, 
     #and the port number is 10000.
-    server_address = ("192.168.0.111", 10000)
+    server_address = (IP_ADDR, 10000)
     no_data_flag = 0
     sock.connect(server_address)
     while True:
@@ -135,15 +135,34 @@ def data_thread2():
     if no_data_flag == 5:
         sock.close()
 
+def update_ip_html(ip_addr):
+    with open("index.html") as file:  
+        html = file.read()
+        file.close()
+
+
+
+    start = html.index('192.168.')
+    end = html.index(':8080/')
+    new_html = html[0:start] + ip_addr + html[end::]
+    f = open("index.html",'w')
+    f.write(new_html)
+    f.close()
 
 
 
 if __name__ == "__main__":
     
+    parser = argparse.ArgumentParser(description="this program stream videos from Raspberry Pi")
+    parser.add_argument("-iprpi", "--iprpi", help="ip_address of RPi", type=str)
+    args = parser.parse_args()
+
+    #update ip in html file
+    update_ip_html(args.iprpi)
     #make data folder
     datafolder = make_folder(root="images/")
-
-    t1 = threading.Thread(target=video_thread, args=[datafolder])
+    #make html file
+    t1 = threading.Thread(target=video_thread, args=[datafolder, args.iprpi])
     #t2 = threading.Thread(target=data_thread2, args=[])
     t1.start()
     #t2.start()
